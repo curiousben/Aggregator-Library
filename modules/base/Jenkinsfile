@@ -1,0 +1,49 @@
+#!/usr/bin/env groovy
+pipeline {
+    agent any
+    environment {
+      LIBRARY_PATH = 'modules/base'
+      MICROSERVICE = 'aggregator'
+      VERSION = '2.0.0'
+    }
+    stages {
+        stage('Pull Github Repo'){
+            steps {
+                deleteDir()
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    doGenerateSubmoduleConfigurations: false,
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[url: 'https://github.com/curiousben/Aggregator-Microservice.git']]
+                ])
+            }
+        }
+        stage('Install, Test, and Build Filter') {
+            agent {
+                docker 'node:8.12.0-jessie'
+            }
+            environment {
+                CI = 'true'
+            }
+            steps {
+                dir(LIBRARY_PATH) {
+                    sh 'npm install --only=dev'
+                    sh 'npm test'
+                    sh 'npm pack'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            agent {
+                dockerfile {
+                  filename 'Dockerfile'
+                  dir 'modules/base'
+                  additionalBuildArgs '--build-arg NPM_PACKAGE_VERSION=${VERSION} --build-arg NPM_PACKAGE=${MICROSERVICE}-${VERSION}.tgz -t curiousben/${MICROSERVICE}-core:${VERSION}'
+                }
+            }
+            steps {
+                sh 'echo Successfully built the image'
+            }
+        }
+    }
+}
