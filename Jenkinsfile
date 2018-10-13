@@ -16,7 +16,7 @@ pipeline {
             }
             steps {
                 dir(LIBRARY_PATH) {
-                    sh 'npm install --only=dev'
+                    sh 'npm install'
                     sh 'npm test'
                     sh 'npm pack'
                 }
@@ -27,7 +27,7 @@ pipeline {
                 dockerfile {
                   filename 'Dockerfile'
                   dir 'modules/base'
-                  additionalBuildArgs '--build-arg NPM_PACKAGE_VERSION=${VERSION} --build-arg NPM_PACKAGE=${MICROSERVICE}-${VERSION}.tgz -t curiousben/${MICROSERVICE}-core:${VERSION}'
+                  additionalBuildArgs '--build-arg NPM_PACKAGE_NAME=${MICROSERVICE} --build-arg NPM_PACKAGE_VERSION=${VERSION} --build-arg NPM_PACKAGE=${MICROSERVICE}-${VERSION}.tgz -t curiousben/${MICROSERVICE}-core:${VERSION}'
                 }
             }
             steps {

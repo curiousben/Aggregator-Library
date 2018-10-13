@@ -8,3 +8,5 @@ Jenkinsfile
 test
 # ESlint configurations
 .eslint*
+# NPM package itself
+*.tgz
