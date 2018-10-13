@@ -6,6 +6,7 @@
   "scripts": {
     "test": "./scripts/testCoreJS.sh"
   },
+  "main":"./aggregator.js",
   "author": "Benjamin Smith",
   "license": "MIT",
   "devDependencies": {
