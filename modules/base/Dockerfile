@@ -3,7 +3,7 @@
 # Author: BenSmith(CuriousBen)
 ####################################
 
-FROM curiousben/redismq-nodejs-amd:latest
+FROM curiousben/mqclient-amd:latest
 
 #----INFO: Load the environmental variables passed in the image
 ARG NPM_PACKAGE
@@ -34,3 +34,9 @@ RUN apk update --no-cache \
 
 #----INFO: Verifies that the npm cache is indexed properly and collects any garbage
   && npm cache verify
+
+#----INFO: Copies the MQ app and configuration files to the working directory
+COPY ./bin/mqApp.js /opt/MQClient/
+COPY ./bin/logger.config /opt/MQClient/config/
+COPY ./bin/mqclient.config /opt/MQClient/config/
+COPY ./bin/aggregtor.config /opt/MQClient/config/
