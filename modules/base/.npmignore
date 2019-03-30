@@ -10,3 +10,7 @@ test
 .eslint*
 # NPM package itself
 *.tgz
+# Bash scripts
+*.sh
+# Travis files
+.travis.yml

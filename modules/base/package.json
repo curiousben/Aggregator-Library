@@ -1,10 +1,12 @@
 {
   "name": "aggregator",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "repository": "github:curiousben/home-infrastructure/microservices/Aggregator/base/",
   "description": "This Microservice collects messages and then acts when a certain condition is met",
   "scripts": {
-    "test": "./scripts/testCoreJS.sh"
+    "test": "./scripts/testCoreJS.sh",
+    "getVersion": "echo $npm_package_version",
+    "getName": "echo $npm_package_name"
   },
   "main":"./aggregator.js",
   "author": "Benjamin Smith",

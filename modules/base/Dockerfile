@@ -6,7 +6,7 @@
 FROM curiousben/mqclient-amd:latest
 
 #----INFO: Load the environmental variables passed in the image
-ARG NPM_PACKAGE
+ARG NPM_PACKAGE_FILE
 ARG NPM_PACKAGE_NAME
 ARG NPM_PACKAGE_VERSION
 
@@ -18,25 +18,25 @@ LABEL \
   maintainer="benjamindsmith3@gmail.com"
 
 #----INFO:Coping local tarball of the Core Microservice Library
-COPY ${NPM_PACKAGE} /tmp/
+COPY ./$NPM_PACKAGE_FILE /tmp/
 
 #----INFO:Update package indices with the udate to date source and installing basic utilities
 RUN apk update --no-cache \
 
 #----INFO:Installing the npm package for production globally
-  && npm install /tmp/${NPM_PACKAGE} --production --global \
+  && npm install /tmp/$NPM_PACKAGE_FILE --production --global \
 
 #----INFO:INFO: Linking the RedisMQ library so any program can use it
-  && npm link ${NPM_PACKAGE_NAME} \
+  && npm link $NPM_PACKAGE_NAME \
 
 #----INFO:Remove the tarball of the Core Microservice Library
-  && rm /tmp/${NPM_PACKAGE} \
+  && rm /tmp/$NPM_PACKAGE_FILE \
 
 #----INFO: Verifies that the npm cache is indexed properly and collects any garbage
   && npm cache verify
 
-#----INFO: Copies the MQ app and configuration files to the working directory
-COPY ./bin/mqApp.js /opt/MQClient/
-COPY ./bin/logger.config /opt/MQClient/config/
-COPY ./bin/mqclient.config /opt/MQClient/config/
-COPY ./bin/aggregtor.config /opt/MQClient/config/
+#----INFO: Creates the Aggregator working directory
+WORKDIR /opt/aggregator/config/
+
+#----INFO: Copies the aggregator configuration file to the working directory
+COPY ./bin/aggregator.config /opt/MQClient/config/

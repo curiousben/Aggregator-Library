@@ -7,11 +7,10 @@
 FROM curiousben/mqclient-aggregator-amd:latest
 
 #----INFO: Pass the actual configurations into the container
-COPY ./bin/mqApp.js /opt/MQClient/
-COPY ./bin/logger.config /opt/MQClient/config/
-COPY ./bin/mqclient.config /opt/MQClient/config/
-COPY ./bin/aggregtor.config /opt/MQClient/config/
-COPY ./bin/aggregtorCallbackClass.js /opt/MQClient/callbackClass.js
+COPY ./services/ble-aggregator/config/dev/logger.config /opt/MQClient/config/
+COPY ./services/ble-aggregator/config/dev/mqclient.config /opt/MQClient/config/
+COPY ./services/ble-aggregator/config/dev/aggregator.config /opt/MQClient/config/
+COPY ./services/ble-aggregator/bin/aggregatorCallbackClass.js /opt/MQClient/callbackClass.js
 
 #----INFO: Installing the Aggregator testing Suite App and testing the microservice
 RUN apk update --no-cache
